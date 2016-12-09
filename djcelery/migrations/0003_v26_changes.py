@@ -72,7 +72,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'result': ('djcelery.picklefield.PickledObjectField', [], {'default': 'None', 'null': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'default': "'PENDING'", 'max_length': '50'}),
-            'task_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'task_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
             'traceback': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         'djcelery.tasksetmeta': {
@@ -81,7 +81,7 @@ class Migration(SchemaMigration):
             'hidden': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'result': ('djcelery.picklefield.PickledObjectField', [], {}),
-            'taskset_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
+            'taskset_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'})
         },
         'djcelery.taskstate': {
             'Meta': {'ordering': "['-tstamp']", 'object_name': 'TaskState'},

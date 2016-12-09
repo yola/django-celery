@@ -15,7 +15,7 @@ class Migration(SchemaMigration):
         # Adding model 'TaskMeta'
         db.create_table('celery_taskmeta', (
                 ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-                ('task_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
+                ('task_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36)),
                 ('status', self.gf('django.db.models.fields.CharField')(default='PENDING', max_length=50)),
                 ('result', self.gf('djcelery.picklefield.PickledObjectField')(default=None, null=True)),
                 ('date_done', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
@@ -25,7 +25,7 @@ class Migration(SchemaMigration):
         # Adding model 'TaskSetMeta'
         db.create_table('celery_tasksetmeta', (
                 ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-                ('taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
+                ('taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36)),
                 ('result', self.gf('djcelery.picklefield.PickledObjectField')()),
                 ('date_done', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),))
         db.send_create_signal('djcelery', ['TaskSetMeta'])
@@ -167,7 +167,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'result': ('djcelery.picklefield.PickledObjectField', [], {'default': 'None', 'null': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'default': "'PENDING'", 'max_length': '50'}),
-            'task_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'task_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
             'traceback': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         'djcelery.tasksetmeta': {
@@ -175,7 +175,7 @@ class Migration(SchemaMigration):
             'date_done': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'result': ('djcelery.picklefield.PickledObjectField', [], {}),
-            'taskset_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
+            'taskset_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'})
         },
         'djcelery.taskstate': {
             'Meta': {'ordering': "['-tstamp']", 'object_name': 'TaskState'},

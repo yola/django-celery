@@ -25,7 +25,7 @@ TASK_STATE_CHOICES = zip(states.ALL_STATES, states.ALL_STATES)
 @python_2_unicode_compatible
 class TaskMeta(models.Model):
     """Task result/status."""
-    task_id = models.CharField(_('task id'), max_length=255, unique=True)
+    task_id = models.CharField(_('task id'), max_length=36, unique=True)
     status = models.CharField(
         _('state'),
         max_length=50, default=states.PENDING, choices=TASK_STATE_CHOICES,
@@ -62,7 +62,7 @@ class TaskMeta(models.Model):
 @python_2_unicode_compatible
 class TaskSetMeta(models.Model):
     """TaskSet result"""
-    taskset_id = models.CharField(_('group id'), max_length=255, unique=True)
+    taskset_id = models.CharField(_('group id'), max_length=36, unique=True)
     result = PickledObjectField()
     date_done = models.DateTimeField(_('created at'), auto_now=True)
     hidden = models.BooleanField(editable=False, default=False, db_index=True)

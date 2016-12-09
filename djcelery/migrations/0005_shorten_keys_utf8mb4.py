@@ -1,83 +1,40 @@
-# encoding: utf-8
-from __future__ import absolute_import
+# -*- coding: utf-8 -*-
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import connections
 
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        conn = connections[db.db_alias]
-        table_list = conn.introspection.get_table_list(conn.cursor())
-        if 'celery_taskmeta' not in table_list:
-            self.create_celery_taskmeta()
-        if 'celery_tasksetmeta' not in table_list:
-            self.create_celery_tasksetmeta()
-        self.apply_current_migration()
-
-    def create_celery_taskmeta(self):
-        # Adding model 'TaskMeta'
-        db.create_table('celery_taskmeta', (
-                    ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-                    ('task_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36)),
-                    ('status', self.gf('django.db.models.fields.CharField')(default='PENDING', max_length=50)),
-                    ('result', self.gf('djcelery.picklefield.PickledObjectField')(default=None, null=True)),
-                    ('date_done', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-                    ('traceback', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('djcelery', ['TaskMeta'])
-
-    def create_celery_tasksetmeta(self):
-        # Adding model 'TaskSetMeta'
-        db.create_table('celery_tasksetmeta', (
-                ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-                ('taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36)),
-                ('result', self.gf('djcelery.picklefield.PickledObjectField')()),
-                ('date_done', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('djcelery', ['TaskSetMeta'])
-
-    def apply_current_migration(self):
-        # Adding field 'PeriodicTask.description'
-        db.add_column('djcelery_periodictask', 'description', self.gf('django.db.models.fields.TextField')(default='', blank=True), keep_default=False)
-
-        # Adding field 'TaskMeta.hidden'
-        db.add_column('celery_taskmeta', 'hidden', self.gf('django.db.models.fields.BooleanField')(default=False, db_index=True), keep_default=False)
-
-        # Adding field 'TaskSetMeta.hidden'
-        db.add_column('celery_tasksetmeta', 'hidden', self.gf('django.db.models.fields.BooleanField')(default=False, db_index=True), keep_default=False)
-
+        # Shorten indecies to fit in MySQL utf8mb4 columns
+        # Retroactively done in previous migrations, so that they can be run,
+        # at all.
+        db.alter_column(u'celery_taskmeta', 'task_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36))
+        db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36))
 
     def backwards(self, orm):
-
-        # Deleting field 'PeriodicTask.description'
-        db.delete_column('djcelery_periodictask', 'description')
-
-        # Deleting field 'TaskMeta.hidden'
-        db.delete_column('celery_taskmeta', 'hidden')
-
-        # Deleting field 'TaskSetMeta.hidden'
-        db.delete_column('celery_tasksetmeta', 'hidden')
-
+        db.alter_column(u'celery_taskmeta', 'task_id', self.gf('django.db.models.fields.CharField')(max_length=255, unique=True))
+        db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255))
 
     models = {
         'djcelery.crontabschedule': {
-            'Meta': {'object_name': 'CrontabSchedule'},
-            'day_of_week': ('django.db.models.fields.CharField', [], {'default': "'*'", 'max_length': '64'}),
-            'hour': ('django.db.models.fields.CharField', [], {'default': "'*'", 'max_length': '64'}),
+            'Meta': {'ordering': "[u'month_of_year', u'day_of_month', u'day_of_week', u'hour', u'minute']", 'object_name': 'CrontabSchedule'},
+            'day_of_month': ('django.db.models.fields.CharField', [], {'default': "u'*'", 'max_length': '64'}),
+            'day_of_week': ('django.db.models.fields.CharField', [], {'default': "u'*'", 'max_length': '64'}),
+            'hour': ('django.db.models.fields.CharField', [], {'default': "u'*'", 'max_length': '64'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'minute': ('django.db.models.fields.CharField', [], {'default': "'*'", 'max_length': '64'})
+            'minute': ('django.db.models.fields.CharField', [], {'default': "u'*'", 'max_length': '64'}),
+            'month_of_year': ('django.db.models.fields.CharField', [], {'default': "u'*'", 'max_length': '64'})
         },
         'djcelery.intervalschedule': {
-            'Meta': {'object_name': 'IntervalSchedule'},
+            'Meta': {'ordering': "[u'period', u'every']", 'object_name': 'IntervalSchedule'},
             'every': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'period': ('django.db.models.fields.CharField', [], {'max_length': '24'})
         },
         'djcelery.periodictask': {
             'Meta': {'object_name': 'PeriodicTask'},
-            'args': ('django.db.models.fields.TextField', [], {'default': "'[]'", 'blank': 'True'}),
+            'args': ('django.db.models.fields.TextField', [], {'default': "u'[]'", 'blank': 'True'}),
             'crontab': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['djcelery.CrontabSchedule']", 'null': 'True', 'blank': 'True'}),
             'date_changed': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -86,7 +43,7 @@ class Migration(SchemaMigration):
             'expires': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'interval': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['djcelery.IntervalSchedule']", 'null': 'True', 'blank': 'True'}),
-            'kwargs': ('django.db.models.fields.TextField', [], {'default': "'{}'", 'blank': 'True'}),
+            'kwargs': ('django.db.models.fields.TextField', [], {'default': "u'{}'", 'blank': 'True'}),
             'last_run_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
             'queue': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
@@ -100,17 +57,18 @@ class Migration(SchemaMigration):
             'last_update': ('django.db.models.fields.DateTimeField', [], {})
         },
         'djcelery.taskmeta': {
-            'Meta': {'object_name': 'TaskMeta', 'db_table': "'celery_taskmeta'"},
+            'Meta': {'object_name': 'TaskMeta', 'db_table': "u'celery_taskmeta'"},
             'date_done': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'hidden': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'meta': ('djcelery.picklefield.PickledObjectField', [], {'default': 'None', 'null': 'True'}),
             'result': ('djcelery.picklefield.PickledObjectField', [], {'default': 'None', 'null': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'default': "'PENDING'", 'max_length': '50'}),
             'task_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
             'traceback': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         'djcelery.tasksetmeta': {
-            'Meta': {'object_name': 'TaskSetMeta', 'db_table': "'celery_tasksetmeta'"},
+            'Meta': {'object_name': 'TaskSetMeta', 'db_table': "u'celery_tasksetmeta'"},
             'date_done': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'hidden': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -118,7 +76,7 @@ class Migration(SchemaMigration):
             'taskset_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'})
         },
         'djcelery.taskstate': {
-            'Meta': {'ordering': "['-tstamp']", 'object_name': 'TaskState'},
+            'Meta': {'ordering': "[u'-tstamp']", 'object_name': 'TaskState'},
             'args': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'eta': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
             'expires': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
@@ -136,7 +94,7 @@ class Migration(SchemaMigration):
             'worker': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['djcelery.WorkerState']", 'null': 'True'})
         },
         'djcelery.workerstate': {
-            'Meta': {'ordering': "['-last_heartbeat']", 'object_name': 'WorkerState'},
+            'Meta': {'ordering': "[u'-last_heartbeat']", 'object_name': 'WorkerState'},
             'hostname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_heartbeat': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'db_index': 'True'})

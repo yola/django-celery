@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'djcelery',
+    'south',
     'someapp',
     'someappwotask',
 )
