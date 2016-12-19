@@ -54,7 +54,7 @@ class Migration(SchemaMigration):
         # Adding model 'PeriodicTask'
         db.create_table('djcelery_periodictask', (
                 ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-                ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=200)),
+                ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=191)),
                 ('task', self.gf('django.db.models.fields.CharField')(max_length=200)),
                 ('interval', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['djcelery.IntervalSchedule'], null=True, blank=True)),
                 ('crontab', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['djcelery.CrontabSchedule'], null=True, blank=True)),
@@ -150,7 +150,7 @@ class Migration(SchemaMigration):
             'interval': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['djcelery.IntervalSchedule']", 'null': 'True', 'blank': 'True'}),
             'kwargs': ('django.db.models.fields.TextField', [], {'default': "'{}'", 'blank': 'True'}),
             'last_run_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '191'}),
             'queue': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'routing_key': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'task': ('django.db.models.fields.CharField', [], {'max_length': '200'}),

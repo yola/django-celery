@@ -12,11 +12,13 @@ class Migration(SchemaMigration):
         db.alter_column(u'celery_taskmeta', 'task_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36))
         db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36))
         db.alter_column('djcelery_workerstate', 'hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=191))
+        db.alter_column('djcelery_periodictask', 'name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=191))
 
     def backwards(self, orm):
         db.alter_column(u'celery_taskmeta', 'task_id', self.gf('django.db.models.fields.CharField')(max_length=255, unique=True))
         db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255))
         db.alter_column('djcelery_workerstate', 'hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255))
+        db.alter_column('djcelery_periodictask', 'name', self.gf('django.db.models.fields.CharField')(max_length=200, unique=True))
 
     models = {
         'djcelery.crontabschedule': {
@@ -47,7 +49,7 @@ class Migration(SchemaMigration):
             'interval': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['djcelery.IntervalSchedule']", 'null': 'True', 'blank': 'True'}),
             'kwargs': ('django.db.models.fields.TextField', [], {'default': "u'{}'", 'blank': 'True'}),
             'last_run_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '191'}),
             'queue': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'routing_key': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'task': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
