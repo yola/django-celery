@@ -11,10 +11,12 @@ class Migration(SchemaMigration):
         # at all.
         db.alter_column(u'celery_taskmeta', 'task_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36))
         db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36))
+        db.alter_column('djcelery_workerstate', 'hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=191))
 
     def backwards(self, orm):
         db.alter_column(u'celery_taskmeta', 'task_id', self.gf('django.db.models.fields.CharField')(max_length=255, unique=True))
         db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255))
+        db.alter_column('djcelery_workerstate', 'hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255))
 
     models = {
         'djcelery.crontabschedule': {
@@ -95,7 +97,7 @@ class Migration(SchemaMigration):
         },
         'djcelery.workerstate': {
             'Meta': {'ordering': "[u'-last_heartbeat']", 'object_name': 'WorkerState'},
-            'hostname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'hostname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '191'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_heartbeat': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'db_index': 'True'})
         }

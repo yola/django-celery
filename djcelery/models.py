@@ -292,7 +292,7 @@ signals.pre_save.connect(PeriodicTasks.changed, sender=PeriodicTask)
 
 
 class WorkerState(models.Model):
-    hostname = models.CharField(_('hostname'), max_length=255, unique=True)
+    hostname = models.CharField(_('hostname'), max_length=191, unique=True)
     last_heartbeat = models.DateTimeField(_('last heartbeat'), null=True,
                                           db_index=True)
 

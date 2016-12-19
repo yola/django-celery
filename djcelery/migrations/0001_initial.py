@@ -73,7 +73,7 @@ class Migration(SchemaMigration):
         # Adding model 'WorkerState'
         db.create_table('djcelery_workerstate', (
                 ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-                ('hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
+                ('hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=191)),
                 ('last_heartbeat', self.gf('django.db.models.fields.DateTimeField')(null=True, db_index=True)),))
         db.send_create_signal('djcelery', ['WorkerState'])
 

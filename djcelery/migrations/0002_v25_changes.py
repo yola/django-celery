@@ -137,7 +137,7 @@ class Migration(SchemaMigration):
         },
         'djcelery.workerstate': {
             'Meta': {'ordering': "['-last_heartbeat']", 'object_name': 'WorkerState'},
-            'hostname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'hostname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '191'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_heartbeat': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'db_index': 'True'})
         }
