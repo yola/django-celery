@@ -91,7 +91,7 @@ class Migration(SchemaMigration):
             'hidden': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'kwargs': ('django.db.models.fields.TextField', [], {'null': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'db_index': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '191', 'null': 'True', 'db_index': 'True'}),
             'result': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'retries': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'runtime': ('django.db.models.fields.FloatField', [], {'null': 'True'}),

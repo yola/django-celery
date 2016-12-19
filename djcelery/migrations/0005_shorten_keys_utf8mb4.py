@@ -13,12 +13,14 @@ class Migration(SchemaMigration):
         db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36))
         db.alter_column('djcelery_workerstate', 'hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=191))
         db.alter_column('djcelery_periodictask', 'name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=191))
+        db.alter_column('djcelery_taskstate', 'name', self.gf('django.db.models.fields.CharField')(max_length=191, null=True, db_index=True))
 
     def backwards(self, orm):
         db.alter_column(u'celery_taskmeta', 'task_id', self.gf('django.db.models.fields.CharField')(max_length=255, unique=True))
         db.alter_column(u'celery_tasksetmeta', 'taskset_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255))
         db.alter_column('djcelery_workerstate', 'hostname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255))
         db.alter_column('djcelery_periodictask', 'name', self.gf('django.db.models.fields.CharField')(max_length=200, unique=True))
+        db.alter_column('djcelery_taskstate', 'name', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, db_index=True))
 
     models = {
         'djcelery.crontabschedule': {
@@ -87,7 +89,7 @@ class Migration(SchemaMigration):
             'hidden': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'kwargs': ('django.db.models.fields.TextField', [], {'null': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'db_index': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '191', 'null': 'True', 'db_index': 'True'}),
             'result': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'retries': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'runtime': ('django.db.models.fields.FloatField', [], {'null': 'True'}),

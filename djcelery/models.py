@@ -330,7 +330,7 @@ class TaskState(models.Model):
     )
     task_id = models.CharField(_('UUID'), max_length=36, unique=True)
     name = models.CharField(
-        _('name'), max_length=200, null=True, db_index=True,
+        _('name'), max_length=191, null=True, db_index=True,
     )
     tstamp = models.DateTimeField(_('event received at'), db_index=True)
     args = models.TextField(_('Arguments'), null=True)
